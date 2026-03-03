@@ -1,0 +1,14 @@
+Um site que faz uma busca por produtos, buscando em diversas lojas
+mas sendo de lojas verificadas, e o usuário poderá fazer um filtro,
+mas inicialmente mostrar os produtos de valor mais baixo daquele produto
+
+Problemas:
+- Fazer um usuário com senha ou apenas redirecionar o usuário para aquele site
+- Como fazer com que o redirecionamento seja pelo meu link de "divulgador"
+- Quais tipos de filtro para colocar nas pesquisas
+- Verificar sites parecidos, para dizer o que eles tem de falha para que eu faça
+diferente, como: Procon, Buscape, (Esqueci o nome, mas é do Nota Paraná)
+
+Soluções:
+- Usar bibliotecas, como a web screatch do Python, e outras parecidas
+- 
