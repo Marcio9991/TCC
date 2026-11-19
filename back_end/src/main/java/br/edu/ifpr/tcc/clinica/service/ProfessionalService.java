@@ -17,28 +17,58 @@ import java.util.List;
 public class ProfessionalService {
     private final ProfessionalRepository professionals;
     private final ServiceCatalogRepository services;
-    public ProfessionalService(ProfessionalRepository professionals, ServiceCatalogRepository services) { this.professionals = professionals; this.services = services; }
 
-    @Transactional(readOnly = true) public List<Professional> list() { return professionals.findAllByOrderByNameAsc(); }
-    @Transactional(readOnly = true) public Professional get(Long id) { return professionals.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profissional não encontrado")); }
+    public ProfessionalService(ProfessionalRepository professionals, ServiceCatalogRepository services) {
+        this.professionals = professionals;
+        this.services = services;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Professional> list() {
+        return professionals.findAllByOrderByNameAsc();
+    }
+
+    @Transactional(readOnly = true)
+    public Professional get(Long id) {
+        return professionals.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profissional não encontrado"));
+    }
+
     public Professional create(ProfessionalRequest request) {
         String cpf = digits(request.cpf());
-        if (professionals.existsByCpf(cpf)) throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe profissional cadastrado com este CPF");
-        Professional p = new Professional(); apply(p, request); return professionals.save(p);
+        if (professionals.existsByCpf(cpf))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe profissional cadastrado com este CPF");
+        Professional p = new Professional();
+        apply(p, request);
+        return professionals.save(p);
     }
+
     public Professional update(Long id, ProfessionalRequest request) {
-        Professional p = get(id); String cpf = digits(request.cpf());
-        if (professionals.existsByCpfAndIdNot(cpf, id)) throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe profissional cadastrado com este CPF");
-        apply(p, request); return professionals.save(p);
+        Professional p = get(id);
+        String cpf = digits(request.cpf());
+        if (professionals.existsByCpfAndIdNot(cpf, id))
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe profissional cadastrado com este CPF");
+        apply(p, request);
+        return professionals.save(p);
     }
+
     private void apply(Professional p, ProfessionalRequest r) {
-        p.setName(r.name()); p.setPhone(r.phone()); p.setCpf(r.cpf());
-        p.setAddress(r.address() == null || r.address().isBlank() ? null : new br.edu.ifpr.tcc.clinica.domain.Address(r.address()));
+        p.setName(r.name());
+        p.setPhone(r.phone());
+        p.setCpf(r.cpf());
+        p.setAddress(r.address() == null || r.address().isBlank() ? null
+                : new br.edu.ifpr.tcc.clinica.domain.Address(r.address()));
         var ids = r.serviceIds() == null ? java.util.Set.<Long>of() : r.serviceIds();
         var found = services.findAllById(ids);
-        if (found.size() != ids.size()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Um ou mais serviços informados não existem");
-        if (found.stream().anyMatch(s -> !s.isActive())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não é possível habilitar um profissional em serviço inativo");
+        if (found.size() != ids.size())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Um ou mais serviços informados não existem");
+        if (found.stream().anyMatch(s -> !s.isActive()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Não é possível habilitar um profissional em serviço inativo");
         p.setServices(new LinkedHashSet<>(found));
     }
-    private String digits(String value) { return value == null ? "" : value.replaceAll("\\D", ""); }
+
+    private String digits(String value) {
+        return value == null ? "" : value.replaceAll("\\D", "");
+    }
 }

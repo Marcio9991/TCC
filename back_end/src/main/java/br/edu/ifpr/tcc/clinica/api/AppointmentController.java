@@ -19,18 +19,42 @@ import java.util.Map;
 @Validated
 public class AppointmentController {
     private final AppointmentService service;
-    public AppointmentController(AppointmentService service) { this.service = service; }
-    @GetMapping public List<Appointment> list(@RequestParam(required = false) @Positive Long patientId,
-        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) { return service.list(patientId, date); }
-    @GetMapping("/{id}") public Appointment get(@PathVariable Long id) { return service.get(id); }
-    @PostMapping @ResponseStatus(HttpStatus.CREATED) public Appointment create(@Valid @RequestBody Requests.AppointmentRequest request) { return service.create(request); }
-    @PutMapping("/{id}") public Appointment update(@PathVariable Long id, @Valid @RequestBody Requests.AppointmentRequest request) { return service.update(id, request); }
-    @PatchMapping("/{id}/status") public Appointment status(@PathVariable Long id, @Valid @RequestBody Requests.StatusRequest request) { return service.updateStatus(id, request.status()); }
+
+    public AppointmentController(AppointmentService service) {
+        this.service = service;
+    }
+
+    @GetMapping
+    public List<Appointment> list(@RequestParam(required = false) @Positive Long patientId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        return service.list(patientId, date);
+    }
+
+    @GetMapping("/{id}")
+    public Appointment get(@PathVariable Long id) {
+        return service.get(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Appointment create(@Valid @RequestBody Requests.AppointmentRequest request) {
+        return service.create(request);
+    }
+
+    @PutMapping("/{id}")
+    public Appointment update(@PathVariable Long id, @Valid @RequestBody Requests.AppointmentRequest request) {
+        return service.update(id, request);
+    }
+
+    @PatchMapping("/{id}/status")
+    public Appointment status(@PathVariable Long id, @Valid @RequestBody Requests.StatusRequest request) {
+        return service.updateStatus(id, request.status());
+    }
 
     @GetMapping("/availability")
     public Map<String, Boolean> availability(@RequestParam @Positive Long professionalId,
-        @RequestParam @Positive Long serviceId,
-        @RequestParam @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startsAt) {
+            @RequestParam @Positive Long serviceId,
+            @RequestParam @NotNull @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startsAt) {
         return Map.of("available", service.isAvailable(professionalId, serviceId, startsAt, null));
     }
 }

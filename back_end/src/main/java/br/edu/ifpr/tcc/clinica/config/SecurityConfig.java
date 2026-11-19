@@ -32,13 +32,16 @@ public class SecurityConfig {
     private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
     @Bean
-    PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder(); }
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     UserDetailsService userDetailsService(UserAccountRepository users) {
         return username -> users.findByUsername(username)
-            .map(account -> User.withUsername(account.getUsername()).password(account.getPasswordHash()).roles("CLINIC").build())
-            .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+                .map(account -> User.withUsername(account.getUsername()).password(account.getPasswordHash())
+                        .roles("CLINIC").build())
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
     @Bean
@@ -55,7 +58,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityContextRepository securityContextRepository() { return new HttpSessionSecurityContextRepository(); }
+    SecurityContextRepository securityContextRepository() {
+        return new HttpSessionSecurityContextRepository();
+    }
 
     @Bean
     CsrfTokenRepository csrfTokenRepository() {
@@ -66,19 +71,23 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http, DaoAuthenticationProvider provider,
-                                    SecurityContextRepository contextRepository, CsrfTokenRepository csrfRepository) throws Exception {
+            SecurityContextRepository contextRepository, CsrfTokenRepository csrfRepository) throws Exception {
         return http
-            .csrf(csrf -> csrf.csrfTokenRepository(csrfRepository).csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
-            .authenticationProvider(provider)
-            .securityContext(context -> context.securityContextRepository(contextRepository))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/favicon.ico", "/api/auth/login", "/api/auth/csrf").permitAll()
-                .anyRequest().authenticated())
-            .formLogin(AbstractHttpConfigurer::disable)
-            .httpBasic(AbstractHttpConfigurer::disable)
-            .logout(AbstractHttpConfigurer::disable)
-            .exceptionHandling(e -> e.authenticationEntryPoint((request, response, exception) -> response.sendError(401, "Autenticação necessária")))
-            .build();
+                .csrf(csrf -> csrf.csrfTokenRepository(csrfRepository)
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()))
+                .authenticationProvider(provider)
+                .securityContext(context -> context.securityContextRepository(contextRepository))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/favicon.ico", "/api/auth/login",
+                                "/api/auth/csrf")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .formLogin(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
+                .exceptionHandling(e -> e.authenticationEntryPoint(
+                        (request, response, exception) -> response.sendError(401, "Autenticação necessária")))
+                .build();
     }
 
     @Bean
@@ -86,15 +95,20 @@ public class SecurityConfig {
             @Value("${APP_ADMIN_USERNAME:admin}") String username,
             @Value("${APP_ADMIN_PASSWORD:}") String configuredPassword) {
         return args -> {
-            if (users.count() != 0) return;
+            if (users.count() != 0)
+                return;
             String password = configuredPassword;
             if (password == null || password.isBlank()) {
                 byte[] bytes = new byte[24];
                 new SecureRandom().nextBytes(bytes);
                 password = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
-                log.warn("Conta inicial criada: usuário '{}'; senha temporária gerada: {}. Guarde-a e configure APP_ADMIN_PASSWORD.", username, password);
+                log.warn(
+                        "Conta inicial criada: usuário '{}'; senha temporária gerada: {}. Guarde-a e configure APP_ADMIN_PASSWORD.",
+                        username, password);
             } else {
-                log.warn("Conta inicial '{}' criada a partir de APP_ADMIN_PASSWORD. Altere a senha de demonstração antes de qualquer uso real.", username);
+                log.warn(
+                        "Conta inicial '{}' criada a partir de APP_ADMIN_PASSWORD. Altere a senha de demonstração antes de qualquer uso real.",
+                        username);
             }
             users.save(new UserAccount(username, encoder.encode(password)));
         };

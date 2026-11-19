@@ -11,9 +11,29 @@ import java.util.List;
 @RequestMapping("/api/patients")
 public class PatientController {
     private final PatientService service;
-    public PatientController(PatientService service) { this.service = service; }
-    @GetMapping public List<Patient> list(@RequestParam(required = false) String q) { return service.list(q); }
-    @GetMapping("/{id}") public Patient get(@PathVariable Long id) { return service.get(id); }
-    @PostMapping @ResponseStatus(HttpStatus.CREATED) public Patient create(@Valid @RequestBody Requests.PatientRequest request) { return service.create(request); }
-    @PutMapping("/{id}") public Patient update(@PathVariable Long id, @Valid @RequestBody Requests.PatientRequest request) { return service.update(id, request); }
+
+    public PatientController(PatientService service) {
+        this.service = service;
+    }
+
+    @GetMapping
+    public List<Patient> list(@RequestParam(required = false) String q) {
+        return service.list(q);
+    }
+
+    @GetMapping("/{id}")
+    public Patient get(@PathVariable Long id) {
+        return service.get(id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Patient create(@Valid @RequestBody Requests.PatientRequest request) {
+        return service.create(request);
+    }
+
+    @PutMapping("/{id}")
+    public Patient update(@PathVariable Long id, @Valid @RequestBody Requests.PatientRequest request) {
+        return service.update(id, request);
+    }
 }

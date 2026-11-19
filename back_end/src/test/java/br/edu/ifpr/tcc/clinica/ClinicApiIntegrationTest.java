@@ -17,7 +17,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @AutoConfigureMockMvc
 @TestPropertySource(properties = "APP_ADMIN_PASSWORD=integration-test-password")
 class ClinicApiIntegrationTest {
-    @Autowired MockMvc mvc;
+    @Autowired
+    MockMvc mvc;
 
     @Test
     void apiRequiresAuthentication() throws Exception {
@@ -28,27 +29,28 @@ class ClinicApiIntegrationTest {
     void authenticatedUserCanCreateAndSearchPatient() throws Exception {
         MvcResult login = mvc.perform(post("/api/auth/login").with(csrf()).contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\":\"admin\",\"password\":\"integration-test-password\"}"))
-            .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isOk()).andReturn();
         MockHttpSession session = (MockHttpSession) login.getRequest().getSession(false);
 
         mvc.perform(post("/api/patients").with(csrf()).session(session).contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Ana Teste\",\"phone\":\"41999990000\",\"cpf\":\"52998224725\",\"age\":31,\"allergies\":\"\"}"))
-            .andExpect(status().isCreated()).andExpect(jsonPath("$.name").value("Ana Teste"));
+                .content(
+                        "{\"name\":\"Ana Teste\",\"phone\":\"41999990000\",\"cpf\":\"52998224725\",\"age\":31,\"allergies\":\"\"}"))
+                .andExpect(status().isCreated()).andExpect(jsonPath("$.name").value("Ana Teste"));
 
         mvc.perform(get("/api/patients").param("q", "Ana").session(session))
-            .andExpect(status().isOk()).andExpect(jsonPath("$[0].cpf").value("52998224725"));
+                .andExpect(status().isOk()).andExpect(jsonPath("$[0].cpf").value("52998224725"));
     }
 
     @Test
     void invalidPatientDataReturnsFieldFeedback() throws Exception {
         MvcResult login = mvc.perform(post("/api/auth/login").with(csrf()).contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\":\"admin\",\"password\":\"integration-test-password\"}"))
-            .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isOk()).andReturn();
         MockHttpSession session = (MockHttpSession) login.getRequest().getSession(false);
 
         mvc.perform(post("/api/patients").with(csrf()).session(session).contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"\",\"phone\":\"x\",\"cpf\":\"123\",\"age\":150}"))
-            .andExpect(status().isBadRequest()).andExpect(jsonPath("$.fields.name").exists())
-            .andExpect(jsonPath("$.fields.cpf").exists());
+                .andExpect(status().isBadRequest()).andExpect(jsonPath("$.fields.name").exists())
+                .andExpect(jsonPath("$.fields.cpf").exists());
     }
 }

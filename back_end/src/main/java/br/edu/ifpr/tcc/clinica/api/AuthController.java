@@ -21,18 +21,22 @@ import java.util.Map;
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository contextRepository;
+
     public AuthController(AuthenticationManager authenticationManager, SecurityContextRepository contextRepository) {
-        this.authenticationManager = authenticationManager; this.contextRepository = contextRepository;
+        this.authenticationManager = authenticationManager;
+        this.contextRepository = contextRepository;
     }
 
     @GetMapping("/csrf")
-    public Map<String, String> csrf(CsrfToken token) { return Map.of("token", token.getToken()); }
+    public Map<String, String> csrf(CsrfToken token) {
+        return Map.of("token", token.getToken());
+    }
 
     @PostMapping("/login")
     public Map<String, String> login(@Valid @RequestBody Requests.LoginRequest request,
-                                     HttpServletRequest httpRequest, HttpServletResponse response) {
+            HttpServletRequest httpRequest, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.username(), request.password()));
+                new UsernamePasswordAuthenticationToken(request.username(), request.password()));
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
@@ -44,11 +48,14 @@ public class AuthController {
     public Map<String, String> logout(HttpServletRequest request) {
         SecurityContextHolder.clearContext();
         HttpSession session = request.getSession(false);
-        if (session != null) session.invalidate();
+        if (session != null)
+            session.invalidate();
         return Map.of("message", "Sessão encerrada");
     }
 
     @ExceptionHandler(org.springframework.security.core.AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public Map<String, String> invalidCredentials() { return Map.of("error", "Usuário ou senha inválidos"); }
+    public Map<String, String> invalidCredentials() {
+        return Map.of("error", "Usuário ou senha inválidos");
+    }
 }

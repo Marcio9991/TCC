@@ -11,8 +11,11 @@ import java.util.Optional;
 
 public interface ProfessionalRepository extends JpaRepository<Professional, Long> {
     boolean existsByCpf(String cpf);
+
     boolean existsByCpfAndIdNot(String cpf, Long id);
+
     List<Professional> findAllByOrderByNameAsc();
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select p from Professional p where p.id = :id")
     Optional<Professional> findByIdForUpdate(@Param("id") Long id);

@@ -8,8 +8,11 @@ import java.util.List;
 
 public interface PatientRepository extends JpaRepository<Patient, Long> {
     boolean existsByCpf(String cpf);
+
     boolean existsByCpfAndIdNot(String cpf, Long id);
+
     List<Patient> findAllByOrderByNameAsc();
+
     @Query("select p from Patient p where lower(p.name) like lower(concat('%', :q, '%')) or p.cpf like concat('%', :cpf, '%') order by p.name asc")
     List<Patient> search(@Param("q") String query, @Param("cpf") String cpfDigits);
 }

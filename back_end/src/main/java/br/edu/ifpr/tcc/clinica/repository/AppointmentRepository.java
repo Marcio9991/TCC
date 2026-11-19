@@ -10,9 +10,12 @@ import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     List<Appointment> findAllByOrderByScheduledAtAsc();
+
     List<Appointment> findByPatient_IdOrderByScheduledAtAsc(Long patientId);
+
     List<Appointment> findByScheduledAtBetweenOrderByScheduledAtAsc(LocalDateTime start, LocalDateTime end);
+
     @Query("select a from Appointment a where a.professional.id = :professionalId and a.status <> :excludedStatus and a.scheduledAt < :newEnd")
     List<Appointment> findPotentialConflicts(@Param("professionalId") Long professionalId,
-        @Param("excludedStatus") AppointmentStatus excludedStatus, @Param("newEnd") LocalDateTime newEnd);
+            @Param("excludedStatus") AppointmentStatus excludedStatus, @Param("newEnd") LocalDateTime newEnd);
 }
