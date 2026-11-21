@@ -88,3 +88,33 @@ As datas usam o horário local do servidor. A API retorna `400` para campos inv�
 ## Limites e decisões para validação acadêmica
 
 A versão atual é uma base funcional de TCC, não uma implantação clínica pronta para produção. Confirmar com a orientadora/responsável clínica a duração padrão dos serviços, expediente e feriados, campos/endereço, política de cancelamento e conclusão, retenção/backup, dados estritamente necessários, perfis de acesso, e regras aplicáveis à LGPD. O modelo inicial implementa a entidade separada `Address`, com localização opcional vinculada a paciente ou profissional, seguindo os diagramas; a necessidade e os detalhes finais do endereço ainda devem ser validados. A duração do serviço é informada no cadastro (não há duração-padrão).
+
+## Registro documental do TCC — 21/11/2026
+
+A documentação do artigo foi alinhada ao estado descrito neste repositório. A aplicação tem uma base funcional implementada, mas esta documentação não a caracteriza como pronta para implantação clínica. O código inclui testes unitários e de integração; a execução da suíte precisa ser confirmada antes de relatar testes aprovados. Nesta sessão, não foi possível executá-la porque Maven não está instalado no ambiente, e `make test` não está definido como alvo no arquivo `MakeFile` presente no repositório.
+
+### Artigo atualizado
+- [Artigo do TCC — DOCX](docs/Artigo_TCC_atualizado.docx)
+- [Artigo do TCC — PDF](docs/Artigo_TCC_atualizado.pdf)
+
+O artigo mantém as seções fora da metodologia sem alterações. O resumo e o abstract foram atualizados por necessidade para não descrever a aplicação como estando em fase inicial, agora que o repositório documenta implementação funcional. A metodologia diferencia os componentes implementados, os testes que existem no código mas não foram executados nesta revisão, e as validações ainda pendentes.
+
+### Protocolo de avaliação conforme as 10 heurísticas de Nielsen
+A avaliação é futura; não se afirma que a inspeção tenha ocorrido. Quando realizada, registrar tarefa e tela/fluxo, evidência, heurística, problema, severidade e ajuste proposto; depois verificar as correções em nova inspeção.
+
+1. **Visibilidade do estado do sistema:** confirmar que salvamento, carregamento, sucesso e falhas sejam comunicados.
+2. **Correspondência com o mundo real:** avaliar vocabulário, formatos de data/hora e conceitos familiares à clínica.
+3. **Controle e liberdade:** avaliar cancelamento, retorno e recuperação de ações sem perda inesperada.
+4. **Consistência e padrões:** verificar rótulos, componentes, formatos e comportamentos uniformes.
+5. **Prevenção de erros:** verificar validações, disponibilidade profissional e prevenção de conflitos de horário.
+6. **Reconhecimento em vez de memorização:** verificar se opções, contexto e regras necessárias estão visíveis no fluxo.
+7. **Flexibilidade e eficiência de uso:** observar a eficiência dos fluxos frequentes sem dificultar o uso inicial.
+8. **Design estético e minimalista:** verificar se as telas priorizam informação essencial para a tarefa.
+9. **Ajudar a reconhecer, diagnosticar e recuperar-se de erros:** verificar se mensagens identificam o problema e orientam a correção.
+10. **Ajuda e documentação:** verificar se há instruções acessíveis para tarefas e regras pouco evidentes.
+
+### Registro do que foi feito nesta sincronização
+- Revisei o README atual, os requisitos do projeto e as classes de teste existentes.
+- Atualizei somente a metodologia do artigo e, por necessidade de consistência de estágio, o resumo e o abstract.
+- Acrescentei este registro e o checklist de Nielsen ao README existente, preservando as instruções de execução e as funcionalidades já documentadas.
+- Não alterei código-fonte. A execução dos testes não foi realizada nesta sessão.
