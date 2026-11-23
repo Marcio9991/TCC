@@ -26,7 +26,7 @@ make run
 Ou diretamente:
 
 ```bash
-mvn -f back_end/pom.xml spring-boot:run
+mvn spring-boot:run
 ```
 
 Abra `http://localhost:8080`. No primeiro início, uma conta `admin` é criada. Se `APP_ADMIN_PASSWORD` não tiver sido definida, uma senha temporária aleatória aparece no log do servidor. Copie-a para o login; ela fica armazenada somente como hash no banco local. H2 em memória não preserva os dados após parar a aplicação.
@@ -50,7 +50,7 @@ DB_USERNAME='usuario_da_aplicacao' \\
 DB_PASSWORD='senha_local' \\
 APP_ADMIN_USERNAME='admin' \\
 APP_ADMIN_PASSWORD='defina-uma-senha-forte' \\
-mvn -f back_end/pom.xml spring-boot:run
+mvn spring-boot:run
 ```
 
 Não coloque senhas reais no Git. Para ambientes além de demonstração, configure TLS, permissões mínimas do banco, backups, gestão de credenciais e revisão de segurança. O perfil MySQL ainda usa `ddl-auto=update` por conveniência acadêmica; antes de produção, substituir por migrações versionadas (Flyway/Liquibase) e validar política de backup/restauração.
@@ -118,3 +118,53 @@ A avaliação é futura; não se afirma que a inspeção tenha ocorrido. Quando 
 - Atualizei somente a metodologia do artigo e, por necessidade de consistência de estágio, o resumo e o abstract.
 - Acrescentei este registro e o checklist de Nielsen ao README existente, preservando as instruções de execução e as funcionalidades já documentadas.
 - Não alterei código-fonte. A execução dos testes não foi realizada nesta sessão.
+
+
+### Auditoria heurística estática — 22/11/2026
+A auditoria foi feita pela leitura do HTML, CSS e JavaScript; não houve inspeção interativa nem teste com usuários. Os itens abaixo são evidências no código ou pontos a validar, não uma certificação de conformidade.
+
+1. **Visibilidade do estado:** há mensagens transitórias de sucesso/erro e aviso de disponibilidade; falta indicador claro durante o carregamento geral de dados.
+2. **Correspondência com o mundo real:** termos e formatos pt-BR são familiares; confirmar se o campo “idade” atende à rotina e não fica desatualizado em registros persistentes.
+3. **Controle e liberdade:** existem edição, limpeza de formulários e confirmação para cancelamento/conclusão; ainda não há aviso antes de descartar dados não salvos.
+4. **Consistência e padrões:** botões e telas seguem componentes comuns; pesquisa por paciente aceita Enter, enquanto filtros da agenda dependem do botão “Filtrar”.
+5. **Prevenção de erros:** HTML e servidor validam campos e conflitos; não há máscara/instrução consistente para CPF em todos os formulários.
+6. **Reconhecimento em vez de memorização:** seletores mostram nomes e há dica para seleção múltipla de serviços; formatos de CPF/telefone e regras da agenda poderiam ter ajuda contextual consistente.
+7. **Flexibilidade e eficiência:** busca de pacientes e filtros de agenda existem; a tela não oferece busca rápida equivalente para profissionais/serviços.
+8. **Design estético e minimalista:** painéis separam formulário e listagem e o dashboard prioriza agenda; os breakpoints responsivos precisam de conferência visual em navegador/dispositivos.
+9. **Reconhecimento e recuperação de erros:** há feedback de servidor e disponibilidade; a clareza da orientação para corrigir cada falha requer validação prática.
+10. **Ajuda e documentação:** há instrução inline para selecionar vários serviços e delimitação do propósito da ferramenta; ainda faltam explicações contextuais para duração, conflito e status de agendamento.
+
+## Melhorias de usabilidade — 22/11/2026
+
+### Alterações implementadas
+- **Indicação da navegação atual (Nielsen 1 e 4):** o botão da seção ativa agora recebe `aria-current="page"`, atualizado ao trocar de seção; os símbolos decorativos da navegação são ocultados das tecnologias assistivas.
+- **Acessibilidade de teclado (boa prática complementar):** links e botões recebem contorno visível ao navegar por teclado; botões durante o envio mostram cursor de espera e menor opacidade. A indicação semântica da seção atual também facilita reconhecê-la na navegação.
+- **Feedback acessível de operação (Nielsen 1 e 9):** notificações de sucesso são anunciadas como status polido e erros como alerta assertivo.
+- **Prevenção de envio duplicado (Nielsen 5):** enquanto cadastros e agendamentos são processados, o botão é temporariamente desabilitado, apresenta “Salvando…” e o formulário indica `aria-busy`; o botão volta ao estado original ao terminar, inclusive após erro.
+- **Metodologia do artigo:** atualizei somente o parágrafo de implementação dentro da seção de metodologia para registrar estas mudanças, deixando explícito que não equivalem à inspeção heurística formal nem à validação com usuários. Resumo, abstract e outras seções permaneceram inalterados.
+- **Versões do artigo:** [DOCX](docs/Artigo_TCC_atualizado.docx) e [PDF](docs/Artigo_TCC_atualizado.pdf). O PDF foi regenerado a partir do DOCX e está sincronizado nesta revisão. O resumo e o abstract registram agora os seis testes aprovados; a avaliação Nielsen e o aceite clínico continuam pendentes.
+
+### Heurísticas consideradas neste ciclo
+O ciclo implementa melhorias pontuais relacionadas sobretudo a visibilidade do estado, consistência, prevenção de erro e diagnóstico/recuperação de erro. As demais heurísticas permanecem no protocolo de inspeção descrito acima e precisam ser avaliadas nas telas e tarefas reais; não se declara conformidade integral nem inspeção concluída.
+
+### Limites da revisão heurística deste ciclo
+A leitura estática identificou pendências que ainda exigem avaliação prática: estado de carregamento explícito durante chamadas de dados; confirmação antes de descartar formulários alterados; exemplos/ajuda consistentes para formatos de CPF e telefone; e avaliação das mensagens e da ajuda contextual nas tarefas reais. O impacto dessas lacunas é uma hipótese até inspeção interativa e validação com representante da clínica. A mudança semântica/visual feita nesta rodada não equivale à conformidade global com as dez heurísticas.
+
+### Verificações realizadas
+- Verificar sintaxe JavaScript com `node --check`.
+- Revisar visualmente o diff e executar `git diff --check`.
+- Na revisão registrada em 22/11, a suíte Maven ainda não havia sido executada; a execução posterior de 23/11 está documentada na seção “Correção do build e testes”. A validação manual da interface em navegador continua pendente.
+
+## Correção do build e testes — 23/11/2026
+
+### O que foi ajustado
+- Corrigi `pom.xml` para compilar as fontes e testes localizados em `back_end/src/main/java` e `back_end/src/test/java`, além de carregar os recursos de `back_end/src/main/resources` e disponibilizar a interface em `front_end`.
+- Criei um `Makefile` convencional com alvos `run`, `test`, `package` e `clean`. O arquivo legado `MakeFile` foi preservado sem alteração.
+- Corrigi no README o comando direto de inicialização, que apontava para `back_end/pom.xml`, inexistente; agora usa `mvn spring-boot:run` na raiz.
+- A mudança corrige a configuração de compilação e a descoberta dos testes; não altera regras de negócio.
+
+### Verificação nesta rodada
+- O primeiro `mvn test` na raiz havia terminado com “No tests to run”, porque a configuração padrão não alcançava `back_end/src`.
+- Após a correção do POM e a instalação do JDK 21 completo, `mvn clean test` concluiu com **6 testes, 0 falhas, 0 erros e 0 ignorados**. A suíte abrange validação de CPF, autenticação obrigatória, cadastro e consulta de pacientes, feedback de dados inválidos e conflito de agendamento por profissional. O alvo `make test` foi executado novamente e também passou com os mesmos seis testes.
+- `node --check front_end/js/app.js` e `git diff --check` foram executados sem apontar problemas.
+- O aceite com a clínica e a avaliação heurística com usuários continuam pendentes.

@@ -36,6 +36,15 @@ textarea {
 button {
     cursor: pointer
 }
+button:focus-visible,
+a:focus-visible {
+    outline: 3px solid #6b3c56;
+    outline-offset: 3px
+}
+button:disabled {
+    cursor: wait;
+    opacity: .68
+}
 
 h1,
 h2,

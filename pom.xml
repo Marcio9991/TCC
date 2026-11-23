@@ -19,9 +19,11 @@
         <dependency><groupId>org.springframework.security</groupId><artifactId>spring-security-test</artifactId><scope>test</scope></dependency>
     </dependencies>
     <build>
+        <sourceDirectory>back_end/src/main/java</sourceDirectory>
+        <testSourceDirectory>back_end/src/test/java</testSourceDirectory>
         <resources>
-            <resource><directory>src/main/resources</directory></resource>
-            <resource><directory>../front_end</directory><targetPath>static</targetPath><filtering>false</filtering></resource>
+            <resource><directory>back_end/src/main/resources</directory></resource>
+            <resource><directory>front_end</directory><targetPath>static</targetPath><filtering>false</filtering></resource>
         </resources>
         <plugins>
             <plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId></plugin>
