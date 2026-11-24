@@ -96,6 +96,7 @@ A documentação do artigo foi alinhada ao estado descrito neste repositório. A
 ### Artigo atualizado
 - [Artigo do TCC — DOCX](docs/Artigo_TCC_atualizado.docx)
 - [Artigo do TCC — PDF](docs/Artigo_TCC_atualizado.pdf)
+- [Texto integral revisado — Markdown](docs/Artigo_TCC_revisado.md)
 
 O artigo mantém as seções fora da metodologia sem alterações. O resumo e o abstract foram atualizados por necessidade para não descrever a aplicação como estando em fase inicial, agora que o repositório documenta implementação funcional. A metodologia diferencia os componentes implementados, os testes que existem no código mas não foram executados nesta revisão, e as validações ainda pendentes.
 
@@ -168,3 +169,13 @@ A leitura estática identificou pendências que ainda exigem avaliação prátic
 - Após a correção do POM e a instalação do JDK 21 completo, `mvn clean test` concluiu com **6 testes, 0 falhas, 0 erros e 0 ignorados**. A suíte abrange validação de CPF, autenticação obrigatória, cadastro e consulta de pacientes, feedback de dados inválidos e conflito de agendamento por profissional. O alvo `make test` foi executado novamente e também passou com os mesmos seis testes.
 - `node --check front_end/js/app.js` e `git diff --check` foram executados sem apontar problemas.
 - O aceite com a clínica e a avaliação heurística com usuários continuam pendentes.
+
+
+## Revisão integral do artigo — 23/11/2026
+
+- Revisei a redação de todas as seções do artigo, não apenas da metodologia. Atualizei introdução, justificativa e delimitação, objetivos, fundamentação teórica, metodologia, resultados e discussão, considerações finais e resumos bilíngues.
+- Corrigi a divergência de stack: o artigo passa a descrever HTML, CSS e JavaScript no front-end, sem afirmar o uso de React. Distingui o MySQL definido para o projeto do H2 usado nos testes automatizados.
+- Reorganizei o estado do trabalho para separar implementação existente, seis testes automatizados aprovados e validações ainda pendentes. O aceite da clínica, a inspeção de usabilidade com Nielsen, a validação com MySQL e a medição de benefícios não são apresentados como concluídos.
+- Reformulei resultados esperados como resultados e discussão, sem afirmar redução de tempo, erros ou conflitos sem dados medidos. Delimitei o sistema como ferramenta administrativa de uma clínica, não prontuário nem solução clínica.
+- Corrigi a apresentação das referências com fontes oficiais consultadas para Spring Boot, MySQL e heurísticas de Nielsen.
+- Gerei versões novas do DOCX e do PDF, em formato A4, e incluí uma versão integral em Markdown para facilitar leitura e revisão textual.
