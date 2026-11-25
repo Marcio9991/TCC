@@ -1,6 +1,6 @@
 package br.edu.ifpr.tcc.clinica.service;
 
-import br.edu.ifpr.tcc.clinica.api.Requests.AppointmentRequest;
+import br.edu.ifpr.tcc.clinica.web.form.Requests.AppointmentRequest;
 import br.edu.ifpr.tcc.clinica.domain.*;
 import br.edu.ifpr.tcc.clinica.repository.*;
 import org.springframework.http.HttpStatus;

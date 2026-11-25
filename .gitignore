@@ -1,0 +1,13 @@
+# Maven / Java build output
+target/
+
+# H2 local persistent database (including lock and trace files)
+data/*.mv.db
+data/*.lock.db
+data/*.trace.db
+
+# IDE and OS files
+.idea/
+.vscode/
+*.iml
+.DS_Store

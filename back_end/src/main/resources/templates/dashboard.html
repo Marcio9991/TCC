@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Visão geral | Clínica Estética</title><link rel="stylesheet" th:href="@{/css/app.css}"></head>
+<body>
+<header th:replace="~{fragments/nav :: nav}"></header>
+<main class="container">
+  <p class="eyebrow">PAINEL ADMINISTRATIVO</p><h1>Visão geral</h1>
+  <p class="muted" th:text="${#temporals.format(today, 'EEEE, dd/MM/yyyy')}">Hoje</p>
+  <div class="stats">
+    <article class="stat-card"><span>Pacientes</span><strong th:text="${patientCount}">0</strong><a th:href="@{/patients}">Consultar cadastros</a></article>
+    <article class="stat-card"><span>Profissionais</span><strong th:text="${professionalCount}">0</strong><a th:href="@{/professionals}">Ver equipe</a></article>
+    <article class="stat-card"><span>Serviços ativos</span><strong th:text="${serviceCount}">0</strong><a th:href="@{/services}">Ver catálogo</a></article>
+    <article class="stat-card"><span>Agendamentos hoje</span><strong th:text="${#lists.size(todayAppointments)}">0</strong><a th:href="@{/appointments}">Abrir agenda</a></article>
+  </div>
+  <section class="panel">
+    <div class="section-heading"><div><p class="eyebrow">AGENDA</p><h2>Atendimentos de hoje</h2></div><a class="button button-primary" th:href="@{/appointments}">Gerenciar agenda</a></div>
+    <p class="empty-state" th:if="${#lists.isEmpty(todayAppointments)}">Não há agendamentos para hoje.</p>
+    <div class="table-wrap" th:if="${!#lists.isEmpty(todayAppointments)}"><table><thead><tr><th>Horário</th><th>Paciente</th><th>Profissional</th><th>Serviço</th><th>Situação</th></tr></thead><tbody>
+      <tr th:each="item : ${todayAppointments}"><td th:text="${#temporals.format(item.scheduledAt, 'HH:mm')}"></td><td th:text="${item.patient.name}"></td><td th:text="${item.professional.name}"></td><td th:text="${item.service.name}"></td><td th:text="${item.status}"></td></tr>
+    </tbody></table></div>
+  </section>
+  <p class="disclaimer">Este sistema é uma ferramenta administrativa acadêmica. Não é prontuário clínico.</p>
+</main>
+</body></html>

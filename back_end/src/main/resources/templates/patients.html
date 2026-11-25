@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Pacientes | Clínica Estética</title><link rel="stylesheet" th:href="@{/css/app.css}"></head><body>
+<header th:replace="~{fragments/nav :: nav}"></header><main class="container">
+<p class="eyebrow">CADASTROS</p><h1>Pacientes</h1><div class="notice success" role="status" th:if="${success}" th:text="${success}"></div><div class="notice error" role="alert" th:if="${error}" th:text="${error}"></div>
+<div class="two-column">
+<section class="panel"><div class="section-heading"><div><p class="eyebrow">REGISTROS</p><h2>Pacientes cadastrados</h2></div></div>
+<form method="get" th:action="@{/patients}" class="filter-row"><label for="q">Buscar por nome ou CPF</label><input id="q" name="q" th:value="${q}" placeholder="Digite para pesquisar"><button class="button button-secondary" type="submit">Buscar</button><a class="button button-quiet" th:href="@{/patients}">Limpar</a></form>
+<p class="empty-state" th:if="${#lists.isEmpty(patients)}" th:text="${q == '' ? 'Nenhum paciente cadastrado.' : 'Nenhum paciente encontrado. Revise o nome ou CPF.'}"></p>
+<div class="table-wrap" th:if="${!#lists.isEmpty(patients)}"><table><thead><tr><th>Nome</th><th>CPF</th><th>Telefone</th><th>Idade</th><th>Ação</th></tr></thead><tbody>
+<tr th:each="item : ${patients}"><td th:text="${item.name}"></td><td th:text="${item.cpf}"></td><td th:text="${item.phone}"></td><td th:text="${item.age}"></td><td><a class="text-link" th:href="@{/patients/{id}/edit(id=${item.id},q=${q})}">Editar</a></td></tr>
+</tbody></table></div></section>
+<section class="panel"><p class="eyebrow">FORMULÁRIO</p><h2 th:text="${editId == null ? 'Novo paciente' : 'Editar paciente'}">Novo paciente</h2>
+<form th:object="${patientForm}" th:action="${editId == null} ? @{/patients} : @{/patients/{id}(id=${editId})}" method="post" class="form-stack">
+<div class="notice error" role="alert" th:if="${#fields.hasGlobalErrors()}"><p th:each="e : ${#fields.globalErrors()}" th:text="${e}"></p></div>
+<label for="patient-name">Nome</label><input id="patient-name" th:field="*{name}" required maxlength="120"><small class="field-error" th:errors="*{name}"></small>
+<label for="patient-cpf">CPF</label><input id="patient-cpf" th:field="*{cpf}" inputmode="numeric" placeholder="000.000.000-00" required><small class="field-error" th:errors="*{cpf}"></small>
+<label for="patient-phone">Telefone</label><input id="patient-phone" th:field="*{phone}" placeholder="(00) 00000-0000" required><small class="field-error" th:errors="*{phone}"></small>
+<label for="patient-age">Idade</label><input id="patient-age" type="number" min="0" max="120" th:field="*{age}" required><small class="field-error" th:errors="*{age}"></small>
+<label for="patient-address">Localização/endereço <span class="muted">(opcional)</span></label><input id="patient-address" th:field="*{address}" maxlength="250">
+<label for="patient-allergies">Alergias/observações</label><textarea id="patient-allergies" th:field="*{allergies}" maxlength="1000" rows="3"></textarea><small class="field-error" th:errors="*{allergies}"></small>
+<div class="button-row"><button class="button button-primary" type="submit" th:text="${editId == null ? 'Cadastrar paciente' : 'Salvar alterações'}">Salvar</button><a class="button button-quiet" th:if="${editId != null}" th:href="@{/patients}">Cancelar edição</a></div></form></section>
+</div></main></body></html>

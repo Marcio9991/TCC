@@ -5,11 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-parent</artifactId><version>3.3.5</version><relativePath/>
     </parent>
-    <groupId>br.edu.ifpr.tcc</groupId><artifactId>clinica-estetica-api</artifactId><version>0.1.0-SNAPSHOT</version>
-    <name>Clinica Estetica API</name><description>API de gestão administrativa de clínica de estética</description>
+    <groupId>br.edu.ifpr.tcc</groupId><artifactId>clinica-estetica-mvc</artifactId><version>0.1.0-SNAPSHOT</version>
+    <name>Clinica Estetica MVC</name><description>Sistema MVC de gestão administrativa de clínica de estética</description>
     <properties><java.version>21</java.version></properties>
     <dependencies>
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-web</artifactId></dependency>
+        <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-thymeleaf</artifactId></dependency>
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-data-jpa</artifactId></dependency>
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-validation</artifactId></dependency>
         <dependency><groupId>org.springframework.boot</groupId><artifactId>spring-boot-starter-security</artifactId></dependency>
@@ -23,8 +24,16 @@
         <testSourceDirectory>back_end/src/test/java</testSourceDirectory>
         <resources>
             <resource><directory>back_end/src/main/resources</directory></resource>
-            <resource><directory>front_end</directory><targetPath>static</targetPath><filtering>false</filtering></resource>
+            <resource>
+                <directory>front_end</directory>
+                <targetPath>static</targetPath>
+                <filtering>false</filtering>
+                <includes><include>css/**</include></includes>
+            </resource>
         </resources>
+        <testResources>
+            <testResource><directory>back_end/src/test/resources</directory></testResource>
+        </testResources>
         <plugins>
             <plugin><groupId>org.springframework.boot</groupId><artifactId>spring-boot-maven-plugin</artifactId></plugin>
         </plugins>

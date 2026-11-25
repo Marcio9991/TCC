@@ -1,6 +1,6 @@
 package br.edu.ifpr.tcc.clinica.service;
 
-import br.edu.ifpr.tcc.clinica.api.Requests.ProfessionalRequest;
+import br.edu.ifpr.tcc.clinica.web.form.Requests.ProfessionalRequest;
 import br.edu.ifpr.tcc.clinica.domain.Professional;
 import br.edu.ifpr.tcc.clinica.domain.ServiceCatalog;
 import br.edu.ifpr.tcc.clinica.repository.ProfessionalRepository;
@@ -25,13 +25,17 @@ public class ProfessionalService {
 
     @Transactional(readOnly = true)
     public List<Professional> list() {
-        return professionals.findAllByOrderByNameAsc();
+        List<Professional> result = professionals.findAllByOrderByNameAsc();
+        result.forEach(professional -> professional.getServices().size());
+        return result;
     }
 
     @Transactional(readOnly = true)
     public Professional get(Long id) {
-        return professionals.findById(id)
+        Professional professional = professionals.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profissional não encontrado"));
+        professional.getServices().size();
+        return professional;
     }
 
     public Professional create(ProfessionalRequest request) {

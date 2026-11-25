@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Acesso | Clínica Estética</title><link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <a class="brand brand-large" th:href="@{/login}">Clínica <span>Estética</span></a>
+    <p class="eyebrow">GESTÃO ADMINISTRATIVA</p>
+    <h1>Entrar no sistema</h1>
+    <p class="muted">Informe suas credenciais para acessar os cadastros e a agenda.</p>
+    <div class="notice error" role="alert" th:if="${param.error}">Usuário ou senha inválidos. Tente novamente.</div>
+    <div class="notice success" role="status" th:if="${param.logout}">Sua sessão foi encerrada.</div>
+    <form th:action="@{/login}" method="post" class="form-stack">
+      <label for="username">Usuário</label><input id="username" name="username" autocomplete="username" required autofocus>
+      <label for="password">Senha</label><input id="password" name="password" type="password" autocomplete="current-password" required>
+      <button class="button button-primary" type="submit">Entrar</button>
+    </form>
+    <p class="fine-print">Aplicação acadêmica de demonstração. Use somente dados fictícios.</p>
+  </main>
+</body>
+</html>

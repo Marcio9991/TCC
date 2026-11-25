@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Serviços | Clínica Estética</title><link rel="stylesheet" th:href="@{/css/app.css}"></head><body>
+<header th:replace="~{fragments/nav :: nav}"></header><main class="container"><p class="eyebrow">CATÁLOGO</p><h1>Serviços</h1><div class="notice success" role="status" th:if="${success}" th:text="${success}"></div><div class="notice error" role="alert" th:if="${error}" th:text="${error}"></div>
+<div class="two-column"><section class="panel"><p class="eyebrow">CATÁLOGO</p><h2>Serviços cadastrados</h2><p class="empty-state" th:if="${#lists.isEmpty(services)}">Nenhum serviço cadastrado.</p><div class="table-wrap" th:if="${!#lists.isEmpty(services)}"><table><thead><tr><th>Serviço</th><th>Tipo</th><th>Duração</th><th>Status</th><th>Ação</th></tr></thead><tbody>
+<tr th:each="item : ${services}"><td th:text="${item.name}"></td><td th:text="${item.type}"></td><td th:text="${item.durationMinutes + ' min'}"></td><td th:text="${item.active ? 'Ativo' : 'Inativo'}"></td><td><a class="text-link" th:href="@{/services/{id}/edit(id=${item.id})}">Editar</a></td></tr>
+</tbody></table></div></section>
+<section class="panel"><p class="eyebrow">FORMULÁRIO</p><h2 th:text="${editId == null ? 'Novo serviço' : 'Editar serviço'}">Novo serviço</h2><form th:object="${serviceForm}" th:action="${editId == null} ? @{/services} : @{/services/{id}(id=${editId})}" method="post" class="form-stack">
+<div class="notice error" role="alert" th:if="${#fields.hasGlobalErrors()}"><p th:each="e : ${#fields.globalErrors()}" th:text="${e}"></p></div>
+<label for="service-name">Nome</label><input id="service-name" th:field="*{name}" required maxlength="120"><small class="field-error" th:errors="*{name}"></small>
+<label for="service-type">Tipo/categoria</label><input id="service-type" th:field="*{type}" required maxlength="60"><small class="field-error" th:errors="*{type}"></small>
+<label for="service-duration">Duração (minutos)</label><input id="service-duration" type="number" min="5" max="1440" th:field="*{durationMinutes}" required><small class="field-error" th:errors="*{durationMinutes}"></small>
+<label class="checkbox-row"><input type="checkbox" th:field="*{active}"> Serviço ativo para novos agendamentos</label>
+<div class="button-row"><button class="button button-primary" type="submit" th:text="${editId == null ? 'Cadastrar serviço' : 'Salvar alterações'}">Salvar</button><a class="button button-quiet" th:if="${editId != null}" th:href="@{/services}">Cancelar edição</a></div></form></section></div></main></body></html>

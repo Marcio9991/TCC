@@ -1,6 +1,6 @@
 package br.edu.ifpr.tcc.clinica.service;
 
-import br.edu.ifpr.tcc.clinica.api.Requests.PatientRequest;
+import br.edu.ifpr.tcc.clinica.web.form.Requests.PatientRequest;
 import br.edu.ifpr.tcc.clinica.domain.Patient;
 import br.edu.ifpr.tcc.clinica.repository.PatientRepository;
 import org.springframework.http.HttpStatus;

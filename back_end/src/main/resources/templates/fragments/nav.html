@@ -1,0 +1,13 @@
+<header class="topbar" th:fragment="nav">
+  <a class="brand" th:href="@{/}">Clínica <span>Estética</span></a>
+  <nav aria-label="Navegação principal">
+    <a th:href="@{/}" th:classappend="${activePage == 'dashboard'} ? ' active'">Visão geral</a>
+    <a th:href="@{/patients}" th:classappend="${activePage == 'patients'} ? ' active'">Pacientes</a>
+    <a th:href="@{/appointments}" th:classappend="${activePage == 'appointments'} ? ' active'">Agendamentos</a>
+    <a th:href="@{/professionals}" th:classappend="${activePage == 'professionals'} ? ' active'">Profissionais</a>
+    <a th:href="@{/services}" th:classappend="${activePage == 'services'} ? ' active'">Serviços</a>
+  </nav>
+  <form th:action="@{/logout}" method="post" class="logout-form">
+    <button class="button button-quiet" type="submit">Sair</button>
+  </form>
+</header>
